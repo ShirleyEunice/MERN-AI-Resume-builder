@@ -54,7 +54,7 @@ const ResumeBuilder = () => {
       <div className='max-w-7xl mx-auto px-4 pb-8'>
         <div className='grid lg:grid-cols-12 gap-8'>
           {/* Left Panel - Form */}
-          <div className='relative lg:col-span-5 rounded-lg overflow-hidden'>
+          <div className='relative lg:col-span-5 rounded-md overflow-hidden'>
             <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1'>
               {/* Progress bar using active section */}
               <hr className='absolute top-0 left-0 right-0 border-2 border-gray-200'></hr>

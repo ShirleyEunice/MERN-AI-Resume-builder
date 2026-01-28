@@ -22,7 +22,6 @@ const Login = () => {
   e.preventDefault();
   try {
     const { data } = await api.post(`/api/users/${state}`, formData);
-    console.log(data, "DATATA");
 
     dispatch(login({
       token: data.token,

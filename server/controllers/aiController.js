@@ -1,85 +1,87 @@
-
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js";
 
 // controller for enchancing a resume's professional summary
 // POST: /api/ai/enhance-pro-sum
-export const enhanceProfessionalSummary = async(req, res)=>{
-    try {
-        const {userContent} = req.body;
+export const enhanceProfessionalSummary = async (req, res) => {
+  try {
+    const { userContent } = req.body;
 
-        if(!userContent){
-            return res.staus(400).json({message: "Missing required field"});
-        }
-
-        const response = await ai.chat.completions.create({
-          model: process.env.OPENAI_MODEL,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are an expert in resume writing. Your task is to enhance the professional summary of a resume. The summary should be 1-2 sentences also highlighing key skills, experience, and career objectives. Make it compelling and ATS-friendly and only return text no options or anything else.",
-            },
-            {
-              role: "user",
-              content: userContent,
-            },
-          ],
-        });
-
-        const enhanceContent = response.choices[0].message.content;
-        return res.status(200).json({message: "Enhanced the professional Summary", enhanceContent})
-    } catch (error) {
-        return res.status(400).json({message: error.message})
+    if (!userContent) {
+      return res.staus(400).json({ message: "Missing required field" });
     }
-}
 
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert in resume writing. Your task is to enhance the professional summary of a resume. The summary should be 1-2 sentences also highlighing key skills, experience, and career objectives. Make it compelling and ATS-friendly and only return text no options or anything else.",
+        },
+        {
+          role: "user",
+          content: userContent,
+        },
+      ],
+    });
+
+    const enhanceContent = response.choices[0].message.content;
+    return res
+      .status(200)
+      .json({ message: "Enhanced the professional Summary", enhanceContent });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 
 // controller for enhancing a resume's job description
 // POST: /api/ai/enhance-job-desc
-export const enhanceJobDescription = async(req, res)=>{
-    try {
-        const {userContent} = req.body;
+export const enhanceJobDescription = async (req, res) => {
+  try {
+    const { userContent } = req.body;
 
-        if(!userContent){
-            return res.staus(400).json({message: "Missing required field"});
-        }
-         const response = await ai.chat.completions.create({
-          model: process.env.OPENAI_MODEL,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are an expert in resume writing. Your task is to enhance the job description of a resume. The job description should be only 1-2 sentence also highlight key responsibilities and achievements. Use action verbs and quantifiable results where possible. Make it ATS-friendly. and only return text no options or anything else.",
-            },
-            {
-              role: "user",
-              content: userContent,
-            },
-          ],
-        });
-
-        const enhanceContent = response.choices[0].message.content;
-        return res.status(200).json({message: "Enhanced the Job Description", enhanceContent})
-    } catch (error) {
-        return res.status(400).json({message: error.message})
+    if (!userContent) {
+      return res.staus(400).json({ message: "Missing required field" });
     }
-}
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert in resume writing. Your task is to enhance the job description of a resume. The job description should be only 1-2 sentence also highlight key responsibilities and achievements. Use action verbs and quantifiable results where possible. Make it ATS-friendly. and only return text no options or anything else.",
+        },
+        {
+          role: "user",
+          content: userContent,
+        },
+      ],
+    });
 
+    const enhanceContent = response.choices[0].message.content;
+    return res
+      .status(200)
+      .json({ message: "Enhanced the Job Description", enhanceContent });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 
 // controller for uploading a resume to the database
 // POST: /api/ai/upload-resume
-export const uploadResume = async(req, res)=>{
-    try {
-        const {resumeText, title} = req.body;
-        const userId = req.userId;
+export const uploadResume = async (req, res) => {
+  try {
+    const { resumeText, title } = req.body;
+    const userId = req.userId;
 
-        if(!resumeText){
-            return res.staus(400).json({message: "Missing required field"});
-        }
-        const systemPrompt = "You are an expert AI agent to extract data from resume.";
+    if (!resumeText) {
+      return res.status(400).json({ message: "Missing required field" });
+    }
+    const systemPrompt =
+      "You are an expert AI agent to extract data from resume.";
 
-        const userPrompt = `extract data from this resume: ${resumeText} Provide data in the following JSON format with no additional text before orr after: {professional_summary:{
+    const userPrompt = `extract data from this resume: ${resumeText} Provide data in the following JSON format with no additional text before orr after: {professional_summary:{
         type: String,
         default: "",
     },
@@ -175,28 +177,39 @@ export const uploadResume = async(req, res)=>{
         }
     ]}`;
 
-         const response = await ai.chat.completions.create({
-          model: process.env.OPENAI_MODEL,
-          messages: [
-            {
-              role: "system",
-              content: systemPrompt
-            },
-            {
-              role: "user",
-              content: userPrompt,
-            },
-          ],
-          response_format: { type: 'json_object'}
-        });
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        {
+          role: "user",
+          content: userPrompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
 
-        const extractedData = response.choices[0].message.content;
-        const parseddata = JSON.parse(extractedData);
+    const extractedData = response.choices[0].message.content;
+    console.log(extractedData, "extracted data");
+    let parseddata;
 
-        const newResume = await Resume.create({userId, title, ...parseddata});
-
-        return res.status(200).json({message: "Extracted the resume", resumeId: newResume._id})
-    } catch (error) {
-        return res.status(400).json({message: error.message})
+    try {
+      parseddata = JSON.parse(extractedData);
+    } catch (err) {
+      console.error("JSON PARSE ERROR:", err.message);
+      console.log("BAD AI RESPONSE:", extractedData);
+      return res.status(500).json({ message: "AI returned invalid JSON" });
     }
-}
+
+    const newResume = await Resume.create({ userId, title, ...parseddata });
+
+    return res
+      .status(200)
+      .json({ message: "Extracted the resume", resumeId: newResume._id });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};

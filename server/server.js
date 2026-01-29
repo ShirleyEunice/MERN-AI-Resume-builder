@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(cors())
 app.use('/api/users', userRouter)
 app.use('/api/resume', resumeRouter)
-app.use('api/ai', aiRouter)
+app.use('/api/ai', aiRouter)
 
 app.get("/", (req, res)=> res.send("server is live..."))
 

@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react'
 import {FilePenLineIcon, PlusIcon, UploadCloudIcon, Trash, PencilIcon, XIcon, UploadCloud} from "lucide-react"
 import {dummyResumeData} from "../assets/assets"
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import api from '../configs/api';
+import pdfToText from "react-pdftotext";
 
 const Dashboard = () => {
+
+  const {user, token} = useSelector(state => state.auth);
 
   const colors = ["#FF5733", "#33FF57", "#3357FF", "#F1C40F", "#8E44AD"];
   const [allResumes, setAllResumes] = useState([]);
@@ -13,22 +19,70 @@ const Dashboard = () => {
   const [resume, setResume] = useState(null);
   const [editResumeId, setEditResumeId] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const createResume = async(event) =>{
-    event.preventDefault();
-    setShowCreateResume(false);
-    navigate("/app/builder/res123");
+    try {
+      event.preventDefault();
+      const {data} = await api.post("/api/resume/create", {title}, {headers: {Authorization: token}});
+      setAllResumes([...allResumes, data.resume]);
+      setTitle("");
+      setShowCreateResume(false);
+      navigate(`/app/builder/${data.resume._id}`)
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
+    setIsLoading(false);
   }
 
   const uploadResume = async(event) => {
-    event.preventDefault();
-    setShowUploadResume(false);
-    navigate("/app/builder/res345");
+  event.preventDefault();
+  
+  // Validate inputs
+  if (!resume) {
+    toast.error("Please select a resume file");
+    return;
   }
+  
+  if (!title.trim()) {
+    toast.error("Please enter a resume title");
+    return;
+  }
+  
+  setIsLoading(true);
+  try {
+    const resumeText = await pdfToText(resume);
+    
+    // Check if PDF text extraction was successful
+    if (!resumeText || resumeText.trim() === "") {
+      toast.error("Could not extract text from PDF. Please try another file.");
+      setIsLoading(false);
+      return;
+    }
+    
+    const {data} = await api.post("/api/ai/upload-resume", {
+      title: title.trim(), 
+      resumeText
+    }, {
+      headers: {Authorization: token}
+    });
+    
+    setTitle("");
+    setResume(null);
+    setShowUploadResume(false);
+    navigate(`/app/builder/${data.resumeId}`)
+  } catch (error) {
+    console.error("Upload error:", error); // Add logging to see exact error
+    toast.error(error?.response?.data?.message || error.message);
+  } finally {
+    setIsLoading(false);
+  }
+}
 
   //To display dummy resumes
   const loadAllResumes = async ()=>{
     setAllResumes(dummyResumeData)
+    
   }
 
   const editTitle = async (event) =>{

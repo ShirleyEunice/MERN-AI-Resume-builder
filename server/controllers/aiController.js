@@ -42,7 +42,7 @@ export const enhanceJobDescription = async (req, res) => {
     const { userContent } = req.body;
 
     if (!userContent) {
-      return res.staus(400).json({ message: "Missing required field" });
+      return res.status(400).json({ message: "Missing required field" });
     }
     const response = await ai.chat.completions.create({
       model: process.env.OPENAI_MODEL,

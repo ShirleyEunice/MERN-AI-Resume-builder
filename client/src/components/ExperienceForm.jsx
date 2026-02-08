@@ -1,7 +1,15 @@
-import { Briefcase, Plus, Sparkles, Trash2 } from 'lucide-react'
+import { Briefcase, LoaderCircleIcon, Plus, Sparkles, Trash2 } from 'lucide-react'
 import React from 'react'
+import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux'
+import api from '../configs/api';
 
 const ExperienceForm = ({data, onChange}) => {
+
+  const {token} = useSelector(state => state.auth);
+  const [generatingIndex, setGeneratingIndex] = React.useState(null);
+
+
     const addExperience = () =>{
         const newExperience = {
             company:"",
@@ -23,6 +31,22 @@ const ExperienceForm = ({data, onChange}) => {
         const updated = [...data];
         updated[index] = {...updated[index], [field]: value}
         onChange(updated)
+    }
+
+    const generateDescription = async (index)=>{
+      setGeneratingIndex(index);
+      const experience = data[index];
+      const prompt = `Enhance this job description ${experience.description} for the position of ${experience.position} at ${experience.company}`
+
+      try {
+        const {data} = await api.post('/api/ai/enhance-job-desc', {userContent:prompt}, {headers: {Authorization: token}});
+        updateExperience(index, "description", data.enhanceContent);
+      } catch (error) {
+        toast.error(error.message);
+      }
+      finally{
+         setGeneratingIndex(-1);
+      }
     }
   return (
     <div className="space-y-6">
@@ -93,7 +117,7 @@ const ExperienceForm = ({data, onChange}) => {
 
                 <input
                   type="month"
-                  value={experience.end_data || ""}
+                  value={experience.end_date || ""}
                   disabled={experience.is_current}
                   onChange={(e) =>
                     updateExperience(index, "end_date", e.target.value)
@@ -126,11 +150,13 @@ const ExperienceForm = ({data, onChange}) => {
                     Job Description
                   </label>
                   <button
+                    onClick={()=> generateDescription(index)}
+                    disabled={generatingIndex === index || !experience.company || !experience.position} 
                     className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100
                                 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
                   >
-                    <Sparkles className="w-3 h-3" />
-                    Enhance with AI
+                    {generatingIndex === index ? (<LoaderCircleIcon className='size-4 animate-spin'/>) : <Sparkles className="w-3 h-3" />}
+                    {generatingIndex === index ? "Generating..." : "Enhance with AI"}
                   </button>
                 </div>
                 <textarea

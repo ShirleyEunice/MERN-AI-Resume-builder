@@ -6,7 +6,7 @@ import protect from "../middlewares/authMiddleware.js";
 const resumeRouter = express.Router();
 
 resumeRouter.post('/create',protect, createResume);
-resumeRouter.post('/delete/:resumeId',protect, deleteResume);
+resumeRouter.delete('/delete/:resumeId',protect, deleteResume);
 resumeRouter.put('/update', upload.single('image'), protect, updateResume);
 resumeRouter.get('/get/:resumeId',protect, getResumeById);
 resumeRouter.get('/public/:resumeId', getResumeByIdPublic);

@@ -1,5 +1,5 @@
 import { response } from "express";
-import imageKit from "../configs/imageKit.js";
+import imagekit from "../configs/imageKit.js";
 import Resume from "../models/Resume.js";
 import fs from "fs";
 
@@ -81,25 +81,31 @@ export const getResumeByIdPublic = async (req, res) => {
 // PUT: /api/resume/update
 export const updateResume = async(req, res)=>{
     try {
-        const {userId} = req.userId;
+        const userId = req.userId;
         const {resumeId, resumeData, removeBackground}= req.body;
         const image = req.file;
-        let resumeDataCopy = JSON.parse(resumeData);
+        let resumeDataCopy;
 
-        if (image) {
-
-          const imageBufferData = fs.createReadStream(image.path);
-          const response = await imageKit.files.upload({
-            file: imageBufferData,
-            fileName: "resume.png",
-            folder: 'user-resumes',
-            transformation: {
-                pre: 'w-300, h-300, fo-face, z-0.75' + (removeBackground ? ",e-bgremove" : "")
-            }
-          });
-          resumeDataCopy.personal_info.image = response.url;
+        if(typeof resumeData === "string"){
+            resumeDataCopy = JSON.parse(resumeData);
+        }else{
+            resumeDataCopy = structuredClone(resumeData);
         }
-        const resume = await Resume.findOneAndUpdate({userId, _id: resumeId, resumeDataCopy}, {new: true})
+
+        if (image && image.buffer){
+            const base64File = image.buffer.toString('base64');
+            const response = await imagekit.files.upload({
+                file: base64File,
+                fileName: `resume_${Date.now()}.png`,
+                folder: 'user-resumes',
+                transformation: {
+                    pre: 'w-300, h-300, fo-face, z-0.75' + (removeBackground ? ',e-bgremoval' : '')
+                }
+            });
+            resumeDataCopy.personal_info.image = response.url;
+        }
+        
+        const resume = await Resume.findOneAndUpdate({userId, _id: resumeId}, {$set: resumeDataCopy}, {new: true})
         
         //return response
         return res.status(200).json({message: "Saved successfully", resume});

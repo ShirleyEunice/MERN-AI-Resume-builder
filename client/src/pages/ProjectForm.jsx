@@ -1,4 +1,4 @@
-import { GraduationCap, Plus, Trash2 } from 'lucide-react';
+import { Folder, Plus, Trash2 } from 'lucide-react';
 import React from 'react'
 
 function ProjectForm({data, onChange}) {
@@ -39,6 +39,13 @@ function ProjectForm({data, onChange}) {
         </button>
       </div>
 
+      {data.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          <Folder className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+          <p>No projects added yet.</p>
+          <p className="text-sm">Click "Add project" to get started.</p>
+        </div>
+      ) : (
         <div className="space-y-4 mt-6">
           {data.map((project, index) => (
             <div
@@ -62,7 +69,7 @@ function ProjectForm({data, onChange}) {
                   onChange={(e) =>
                     updateProject(index, "name", e.target.value)
                   }
-                  className="px-3 py-2 text-sm rounded-lg"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
                   type="text"
@@ -71,7 +78,7 @@ function ProjectForm({data, onChange}) {
                   onChange={(e) =>
                     updateProject(index, "type", e.target.value)
                   }
-                  className="px-3 py-2 text-sm rounded-lg"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <textarea
                   type="text"
@@ -81,12 +88,13 @@ function ProjectForm({data, onChange}) {
                   onChange={(e) =>
                     updateProject(index, "description", e.target.value)
                   }
-                  className="px-3 py-2 text-sm rounded-lg resize-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
             </div>
           ))}
         </div>
+      )}
     </div>
   )
 }

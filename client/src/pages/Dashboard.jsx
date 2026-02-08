@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {FilePenLineIcon, PlusIcon, UploadCloudIcon, Trash, PencilIcon, XIcon, UploadCloud} from "lucide-react"
+import {FilePenLineIcon, PlusIcon, UploadCloudIcon, Trash, PencilIcon, XIcon, UploadCloud, LoaderCircleIcon} from "lucide-react"
 import {dummyResumeData} from "../assets/assets"
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -79,22 +79,50 @@ const Dashboard = () => {
   }
 }
 
-  //To display dummy resumes
+  //To display all resumes
   const loadAllResumes = async ()=>{
-    setAllResumes(dummyResumeData)
+    try{
+      const {data} = await api.get("/api/users/resumes", {headers: {Authorization: token}});
+      setAllResumes(Array.isArray(data.resumes) ? data.resumes : [])
+    }catch(error){
+      toast.error(error?.response?.data?.message || error.message);
+    }
     
   }
 
-  const editTitle = async (event) =>{
-    event.preventDefault();
-
-  }
+  const editTitle = async (event) => {
+    try {
+      event.preventDefault();
+      const { data } = await api.put(
+        `/api/resume/update`,
+        { resumeId: editResumeId, resumeData: { title } },
+        { headers: { Authorization: token } },
+      );
+      setAllResumes(
+        allResumes.map((resume) =>
+          resume._id === editResumeId ? { ...resume, title } : resume,
+        ),
+      ); //Copy all existing fields of resume, Override only the title
+      setTitle("");
+      setEditResumeId("");
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
+  };
 
   const deleteResume = async(resumeId) =>{
-    const confirm = window.confirm('Are you sure you want to delete this resume?')
+    try{
+      const confirm = window.confirm('Are you sure you want to delete this resume?')
     if(confirm){
+      const {data} = await api.delete(`/api/resume/delete/${resumeId}`, {headers: {Authorization: token}});
       setAllResumes(prev => prev.filter(resume => resume._id !== resumeId))
+      toast.success(data.message);
     }
+    }catch(error){
+      toast.error(error?.response?.data?.message || error.message);
+    }
+    
   }
 
   useEffect(()=>{
@@ -258,8 +286,9 @@ const Dashboard = () => {
                 />
               </div>
 
-              <button className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                Upload Resume
+              <button disabled={isLoading}className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+               {isLoading && <LoaderCircleIcon className='animate-spin size-4 text-white'/>}
+                {isLoading ? 'Uploading...' : 'Create Resume'}
               </button>
               <XIcon
                 className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"

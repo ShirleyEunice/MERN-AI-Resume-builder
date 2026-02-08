@@ -70,7 +70,7 @@ const EducationForm = ({data, onChange}) => {
                   onChange={(e) =>
                     updateEducation(index, "institution", e.target.value)
                   }
-                  className="px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
                   type="text"
@@ -79,16 +79,16 @@ const EducationForm = ({data, onChange}) => {
                   onChange={(e) =>
                     updateEducation(index, "degree", e.target.value)
                   }
-                  className="px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
                   type="text"
                   value={education.field || ""}
                   placeholder='Field of Study'
                   onChange={(e) =>
-                    updateExperience(index, "field", e.target.value)
+                    updateEducation(index, "field", e.target.value)
                   }
-                  className="px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
 
                 <input
@@ -97,16 +97,16 @@ const EducationForm = ({data, onChange}) => {
                   onChange={(e) =>
                     updateEducation(index, "graduation_date", e.target.value)
                   }
-                  className="px-3 py-2 text-sm disabled:bg-gray-100"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                 />
                   <input
                   type="text"
                   value={education.gpa || ""}
                   placeholder='GPA (optional)'
                   onChange={(e) =>
-                    updateExperience(index, "gpa", e.target.value)
+                    updateEducation(index, "gpa", e.target.value)
                   }
-                  className="px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>

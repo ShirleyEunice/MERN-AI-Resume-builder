@@ -1,0 +1,42 @@
+# Resume Builder
+
+A modern, full-stack web application for creating professional resumes with AI-powered assistance and customizable templates. Built with React on the frontend and Node.js/Express on the backend, featuring multiple resume templates, real-time preview, and seamless user experience.
+
+## Features
+
+- **User Authentication**: Secure login and registration with JWT tokens
+- **Resume Builder**: Step-by-step form-based resume creation with sections for personal info, education, experience, skills, projects, and professional summary
+- **Multiple Templates**: Choose from Classic, Modern, Minimal, and Minimal with Image templates
+- **AI Integration**: Leverage OpenAI for intelligent resume suggestions and content generation
+- **Real-time Preview**: See your resume update live as you edit
+- **Image Upload**: Add profile pictures and manage images with ImageKit
+- **Responsive Design**: Mobile-friendly interface built with Tailwind CSS
+- **Export Ready**: Generate professional resumes ready for download
+
+## Tech Stack
+
+### Frontend
+- React 19 with Vite
+- Tailwind CSS for styling
+- React Router for navigation
+- Redux Toolkit for state management
+- Lucide React for icons
+
+### Backend
+- Node.js with Express.js
+- MongoDB with Mongoose ODM
+- JWT for authentication
+- OpenAI API integration
+- ImageKit for image management
+- Multer for file uploads
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies for both client and server
+3. Set up environment variables (MongoDB URI, OpenAI API key, etc.)
+4. Run the development servers
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

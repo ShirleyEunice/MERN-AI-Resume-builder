@@ -13,6 +13,8 @@ const Preview = () => {
   const [resumeData, setResumeData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  
+
   const loadResume = async ()=>{
     try {
       const {data} = await api.get(`/api/resume/public/` + resumeId);

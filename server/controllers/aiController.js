@@ -192,17 +192,19 @@ export const uploadResume = async (req, res) => {
       response_format: { type: "json_object" },
     });
 
+
     const extractedData = response.choices[0].message.content;
     console.log(extractedData, "extracted data");
     let parseddata;
 
     try {
       parseddata = JSON.parse(extractedData);
-    } catch (err) {
-      console.error("JSON PARSE ERROR:", err.message);
-      console.log("BAD AI RESPONSE:", extractedData);
-      return res.status(500).json({ message: "AI returned invalid JSON" });
-    }
+    }  catch (error) {
+  console.error("UPLOAD RESUME ERROR:", error);
+  return res.status(500).json({
+    message: error.message || "Failed to upload resume",
+  });
+}
 
     const newResume = await Resume.create({ userId, title, ...parseddata });
 
@@ -210,6 +212,9 @@ export const uploadResume = async (req, res) => {
       .status(200)
       .json({ message: "Extracted the resume", resumeId: newResume._id });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
-  }
+  console.error("UPLOAD RESUME FATAL ERROR:", error);
+  return res.status(500).json({
+    message: error.message || "Failed to upload resume",
+  });
+}
 };

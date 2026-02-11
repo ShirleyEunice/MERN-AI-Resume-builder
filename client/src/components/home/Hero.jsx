@@ -7,12 +7,12 @@ const Hero = () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
 
     const logos = [
-        'https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/framer.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg',
-        'https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg',
-    ]
+      '/logos/instagram.svg',
+      '/logos/framer.svg',
+      '/logos/microsoft.svg',
+      '/logos/huawei.svg',
+      '/logos/google.svg',
+    ];
   return (
     <>
       <div className="min-h-screen pb-20">
@@ -182,7 +182,7 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className="flex items-center gap-4 ">
             <Link
-              to='/app'
+              to='/app?state=register'
               className="bg-purple-500 hover:bg-purple-600 text-white rounded-full px-9 h-12 m-1 ring-offset-2 ring-1 ring-purple-400 flex items-center transition-colors"
             >
               Get started

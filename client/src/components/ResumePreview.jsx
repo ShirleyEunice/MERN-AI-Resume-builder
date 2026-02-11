@@ -22,7 +22,8 @@ const ResumePreview = ({data, template, accentColor, classes = ""}) => {
     <div className="w-full bg-gray-100">
       <div
         className={
-          "border border-gray-200 print:shadow-none print:border-none" + classes
+          "w-full max-w-[850px] bg-white border border-gray-200 print:shadow-none print:border-none " +
+          classes
         }
         id="resume-preview"
       >

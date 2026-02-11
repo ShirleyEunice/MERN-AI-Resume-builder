@@ -1,8 +1,10 @@
 import { Check, Layout } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRef } from 'react';
 
 const TemplateSelector = ({selectedTemplate, onChange}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const wrapperRef = useRef(null);
 
      const templates = [
         {
@@ -30,8 +32,23 @@ const TemplateSelector = ({selectedTemplate, onChange}) => {
 
         },
      ]  
+
+
+     useEffect(() => {
+       const handleClickOutside = (event) => {
+         if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+           setIsOpen(false);
+         }
+       };
+
+       document.addEventListener("mousedown", handleClickOutside);
+       return () => {
+         document.removeEventListener("mousedown", handleClickOutside);
+       };
+     }, []);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapperRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1 text-sm text-blue-600 bg-linear-to-br from-blue-50 to-blue-100 ring-blue-300 hover:ring transition-all px-3 py-2 rounded-lg"

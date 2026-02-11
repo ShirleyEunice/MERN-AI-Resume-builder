@@ -13,12 +13,12 @@ const ModernTemplate = ({ data, accentColor }) => {
 	return (
 		<div className="max-w-4xl mx-auto bg-white text-gray-800">
 			{/* Header */}
-			<header className="p-8 text-white" style={{ backgroundColor: accentColor }}>
+			<header className="px-5 py-6 sm:p-8 text-white" style={{ backgroundColor: accentColor }}>
 				<h1 className="text-4xl font-light mb-3">
 					{data.personal_info?.full_name || "Your Name"}
 				</h1>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm ">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm break-words">
 					{data.personal_info?.email && (
 						<div className="flex items-center gap-2">
 							<Mail className="size-4" />
@@ -40,19 +40,19 @@ const ModernTemplate = ({ data, accentColor }) => {
 					{data.personal_info?.linkedin && (
 						<a target="_blank" href={data.personal_info?.linkedin} className="flex items-center gap-2">
 							<Linkedin className="size-4" />
-							<span className="break-all text-xs">{data.personal_info.linkedin.split("https://www.")[1] ? data.personal_info.linkedin.split("https://www.")[1] : data.personal_info.linkedin}</span>
+							<span className="break-all text-xs leading-tight">{data.personal_info.linkedin.split("https://www.")[1] ? data.personal_info.linkedin.split("https://www.")[1] : data.personal_info.linkedin}</span>
 						</a>
 					)}
 					{data.personal_info?.website && (
 						<a target="_blank" href={data.personal_info?.website} className="flex items-center gap-2">
 							<Globe className="size-4" />
-							<span className="break-all text-xs">{data.personal_info.website.split("https://")[1] ? data.personal_info.website.split("https://")[1] : data.personal_info.website}</span>
+							<span className="break-all text-xs leading-tight">{data.personal_info.website.split("https://")[1] ? data.personal_info.website.split("https://")[1] : data.personal_info.website}</span>
 						</a>
 					)}
 				</div>
 			</header>
 
-			<div className="p-8">
+			<div className="px-5 py-6 sm:p-8">
 				{/* Professional Summary */}
 				{data.professional_summary && (
 					<section className="mb-8">

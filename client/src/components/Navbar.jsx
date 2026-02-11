@@ -19,7 +19,7 @@ const Navbar = () => {
             <img src="/logo.svg" alt="logo" className='h-11 w-auto' />
             </Link>
             <div className='flex items-center gap-4 text-sm'>
-                <p>Hi, {user?.name}</p>
+                <p className='hidden sm:block'>Hi, {user?.name}</p>
                 <button onClick={logoutUser} className='bg-white hover:bg-slate-50 border border-gray-300 px-7 py-1.5 rounded-full active:scale-95 transition-all'>Logout</button>
             </div>
         </nav>

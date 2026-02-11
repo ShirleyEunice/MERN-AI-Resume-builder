@@ -1,7 +1,10 @@
 import { Check, Palette } from 'lucide-react';
 import React, { use, useState } from 'react'
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
 const ColorPicker = ({selectedColor, onChange}) => {
+  const wrapperRef = useRef(null);
     const colors = [
       {
         name: "Blue",
@@ -45,9 +48,22 @@ const ColorPicker = ({selectedColor, onChange}) => {
       },
     ];
 
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+
     const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className='relative'>
+    <div className='relative' ref={wrapperRef}>
         <button onClick={()=> setIsOpen(!isOpen)} className='flex items-center gap-1 text-sm text-purple-600 bg-linear-to-br from-purple-50 to-purple-100 ring-purple hover:ring transition-all px-3 py-2 rounded-lg'>
             <Palette size={16} /><span className='max-sm:hidden'>Accent</span>
         </button>

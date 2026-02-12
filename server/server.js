@@ -5,6 +5,7 @@ import connectDB from "./configs/db.js";
 import userRouter from "./routes/userRoutes.js";
 import resumeRouter from "./routes/resumeRoutes.js";
 import aiRouter from "./routes/aiRoutes.js";
+import feedbackRouter from "./routes/feedbackRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(cors())
 app.use('/api/users', userRouter)
 app.use('/api/resume', resumeRouter)
 app.use('/api/ai', aiRouter)
+app.use("/api/feedback", feedbackRouter)
 
 app.get("/", (req, res)=> res.send("server is live..."))
 

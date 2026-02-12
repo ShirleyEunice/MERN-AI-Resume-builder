@@ -29,7 +29,7 @@ export const deleteResume = async(req, res)=>{
         await Resume.findOneAndDelete({userId, _id: resumeId})
 
         //return success message
-        return res.status(201).json({message: "Resume deleted successfully"});
+        return res.status(200).json({message: "Resume deleted successfully"});
     } catch (error) {
         return res.status(400).json({message: error.message})
     }
@@ -45,7 +45,7 @@ export const getResumeById = async(req, res)=>{
 
         const resume = await Resume.findOne({userId, _id: resumeId});
         if(!resume){
-            res.status(404).json({message: "Resume not found"})
+            return res.status(404).json({message: "Resume not found"})
         }
         //return success message
         resume.__v = undefined;
@@ -109,6 +109,21 @@ export const updateResume = async(req, res)=>{
         
         //return response
         return res.status(200).json({message: "Saved successfully", resume});
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+    }
+}
+
+
+// controller to geet all resumes of a user
+// GET: /api/user/resumes`
+export const getUserResumes = async(req, res)=>{
+    try {
+        const userId = req.userId;
+
+        const resumes = (await Resume.find({userId})).toSorted({createdAt: -1});
+        //return response
+        return res.status(200).json({message: "Resumes fetched successfully", resumes});
     } catch (error) {
         return res.status(400).json({message: error.message})
     }

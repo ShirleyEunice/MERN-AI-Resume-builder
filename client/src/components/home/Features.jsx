@@ -1,19 +1,22 @@
-import React from 'react'
-import {Zap} from 'lucide-react'
-import Title from './Title';
+import React from "react";
+import { Zap } from "lucide-react";
+import Title from "./Title";
 
 const Features = () => {
-    const [isHover, setIsHover] = React.useState(false);
+  const [isHover, setIsHover] = React.useState(false);
   return (
     <div
       id="features"
       className="flex flex-col items-center my-10 scroll-mt-12"
     >
       <div className="flex items-center gap-2 text-sm text-purple-800 bg-purple-500/10 rounded-full px-6 py-1.5">
-        <Zap width={14}/>
+        <Zap width={14} />
         <span>Simple Process</span>
       </div>
-      <Title title="Build your resume" description='Our streamlined process helps you create a professional resume in minutes with intelligent AI-powered tools and features.'/>
+      <Title
+        title="Create Your Professional Resume in Minutes"
+        description="Our AI-powered resume builder helps you generate, edit, and optimize resumes effortlessly with smart suggestions and modern templates."
+      />
       <div className="flex flex-col md:flex-row items-center justify-center xl:mt-10">
         <img
           className="max-w-2xl w-full xl:-ml-32"
@@ -52,10 +55,11 @@ const Features = () => {
               </svg>
               <div className="space-y-2">
                 <h3 className="text-base font-semibold text-slate-700">
-                  Real-Time Analytics
+                  AI-Powered Resume Builder
                 </h3>
                 <p className="text-sm text-slate-600 max-w-xs">
-                  Get instant insights into your finances with live dashboards.
+                  Generate professional resumes instantly with intelligent AI
+                  suggestions tailored to your skills and experience.
                 </p>
               </div>
             </div>
@@ -79,10 +83,11 @@ const Features = () => {
               </svg>
               <div className="space-y-2">
                 <h3 className="text-base font-semibold text-slate-700">
-                  Bank-Grade Security
+                  Smart Editing & Customization
                 </h3>
                 <p className="text-sm text-slate-600 max-w-xs">
-                  End-to-end encryption, 2FA, compliance with GDPR standards.
+                  Easily customize templates, adjust layouts, update skills, and
+                  personalize your resume in real-time.
                 </p>
               </div>
             </div>
@@ -107,11 +112,11 @@ const Features = () => {
               </svg>
               <div className="space-y-2">
                 <h3 className="text-base font-semibold text-slate-700">
-                  Customizable Reports
+                  Upload & Improve Existing Resume
                 </h3>
                 <p className="text-sm text-slate-600 max-w-xs">
-                  Export professional, audit-ready financial reports for tax or
-                  internal review.
+                  Upload your existing resume and let our AI enhance formatting,
+                  content, and structure automatically.
                 </p>
               </div>
             </div>
@@ -127,6 +132,6 @@ const Features = () => {
             `}</style>
     </div>
   );
-}
+};
 
-export default Features
+export default Features;

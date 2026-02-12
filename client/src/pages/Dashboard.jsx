@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import {FilePenLineIcon, PlusIcon, UploadCloudIcon, Trash, PencilIcon, XIcon, UploadCloud, LoaderCircleIcon} from "lucide-react"
-import {dummyResumeData} from "../assets/assets"
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import api from '../configs/api';
 import pdfToText from "react-pdftotext";
+import FeedbackModal from '../components/FeedbackModal';
 
 const Dashboard = () => {
 
@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [editResumeId, setEditResumeId] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const createResume = async(event) =>{
     try {
@@ -124,10 +125,15 @@ const Dashboard = () => {
     }
     
   }
-
   useEffect(()=>{
     loadAllResumes();
-  }, [])
+  },[])
+
+  useEffect(()=>{
+    if( allResumes.length === 1 && user && !user.hasGivenFeedback){
+      setShowFeedbackModal(true);
+    }
+  }, [allResumes])
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -332,6 +338,10 @@ const Dashboard = () => {
               />
             </div>
           </form>
+        )}
+
+        {showFeedbackModal && (
+          <FeedbackModal onClose={()=> setShowFeedbackModal(false)} />
         )}
       </div>
     </div>

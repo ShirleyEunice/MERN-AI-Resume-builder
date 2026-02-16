@@ -14,6 +14,7 @@ import ProjectForm from './ProjectForm';
 import SkillsForm from './SkillsForm';
 import { useSelector } from 'react-redux';
 import api from '../configs/api';
+import { ClipLoader } from "react-spinners";
 
 const ResumeBuilder = () => {
   const {resumeId} = useParams();
@@ -133,7 +134,13 @@ const ResumeBuilder = () => {
         </Link>
       </div>
       <div className="max-w-7xl mx-auto px-4 pb-8">
-        <div className="grid lg:grid-cols-12 gap-8">
+        {
+          loading ? (
+            <div className='flex items-center justify-center h-96'>
+            <ClipLoader size={55} speedMultiplier={1.25} color="purple" />
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-12 gap-8">
           {/* Left Panel - Form */}
           <div className="relative lg:col-span-5 rounded-md overflow-hidden">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1">
@@ -202,13 +209,6 @@ const ResumeBuilder = () => {
               <div>
                 {/* Form Content */}
                 <div className="space-y-6">
-                  {
-                    loading ? (
-                      <div className="flex items-center justify-center h-60">
-                        <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
-                        </div>
-                    ) : (
-                      <>
                       {activeSection.id === "personal" && (
                     <PersonalInfoForm
                       data={resumeData.personal_info}
@@ -257,9 +257,6 @@ const ResumeBuilder = () => {
                        data={resumeData.skills}
                        onChange={(data)=> setResumeData((prev)=> ({...prev, skills:data}))}/>
                   )}
-                      </>
-                    )
-                  }
                 </div>
                 <button 
                 onClick={()=> {toast.promise(saveResume, {loading: "Saving..."})}}
@@ -296,21 +293,16 @@ const ResumeBuilder = () => {
               </div>
             </div>
             {/* resume preview */}
-            {loading ? (
-              <div className="flex items-center justify-center h-96">
-                <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
-              </div>
-            ) : (
-              <>
               <ResumePreview
               data={resumeData}
               template={resumeData.template}
               accentColor={resumeData.accent_color}
             />
-              </>
-            )}
           </div>
         </div>
+          )
+        }
+        
       </div>
     </div>
   );

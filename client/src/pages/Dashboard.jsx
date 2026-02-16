@@ -21,6 +21,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const createResume = async(event) =>{
     try {
@@ -82,11 +83,15 @@ const Dashboard = () => {
 
   //To display all resumes
   const loadAllResumes = async ()=>{
+    setLoading(true);
     try{
       const {data} = await api.get("/api/users/resumes", {headers: {Authorization: token}});
+      setLoading(false);
       setAllResumes(Array.isArray(data.resumes) ? data.resumes : [])
     }catch(error){
       toast.error(error?.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
     
   }
@@ -173,6 +178,13 @@ const Dashboard = () => {
         <hr className="border-slate-300 my-6 sm:w-[305px]"></hr>
 
         <div className="grid grid-cols-2 sm:flex flex-wrap gap-4">
+          {
+            loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm z-10">
+                <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
+              </div>
+            )
+          }
           {allResumes.map((resume, index) => {
             const baseColor = colors[index % colors.length];
             return (

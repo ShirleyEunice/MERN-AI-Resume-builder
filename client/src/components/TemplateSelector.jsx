@@ -31,6 +31,16 @@ const TemplateSelector = ({selectedTemplate, onChange}) => {
             preview: "Ultra-clean design that puts your content front and center."
 
         },
+        {
+          id: "professional-split",
+          name: "Professional Split",
+          preview: "A balanced layout with a sidebar for key info and a main section for experience."
+        },
+        {
+          id: "executive-edge",
+          name: "Executive Edge",
+          preview: "A sophisticated design with a bold header and elegant typography, perfect for senior professionals."
+        }
      ]  
 
 

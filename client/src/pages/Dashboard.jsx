@@ -211,8 +211,8 @@ const Dashboard = () => {
                 >
                   Updated on {new Date(resume.updatedAt).toLocaleDateString()}
                 </p>
-                <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 group-hover:flex items-center hidden">
-                  <Trash onClick={()=> deleteResume(resume._id)} className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
+                <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 items-center hidden group-hover:flex sm:flex">
+                  <Trash onClick={()=> deleteResume(resume._id)} className="size-7 p-1.5 hover:bg-white/50 rounded text-red-500 transition-colors" />
                   <PencilIcon onClick={()=>{setEditResumeId(resume._id); setTitle(resume.title)}} className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
                 </div>
               </button>

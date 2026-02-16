@@ -79,7 +79,7 @@ export const uploadResume = async (req, res) => {
       return res.status(400).json({ message: "Missing required field" });
     }
     const systemPrompt =
-      "You are an expert AI agent to extract data from resume.";
+      "You are an expert AI agent to extract data from resume.Always extract all date fields (such as start_date, end_date, graduation_date) if present in any format, and convert them to the standard format YYYY-MM-DD. If a date is missing, leave it as an empty string. Do not skip any date information present in the resume.";
 
     const userPrompt = `extract data from this resume: ${resumeText} Provide data in the following JSON format with no additional text before orr after: {professional_summary:{
         type: String,

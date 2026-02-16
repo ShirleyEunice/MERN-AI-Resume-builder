@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import api from '../configs/api';
 import pdfToText from "react-pdftotext";
 import FeedbackModal from '../components/FeedbackModal';
+import { ClipLoader } from "react-spinners";
 
 const Dashboard = () => {
 
@@ -181,7 +182,7 @@ const Dashboard = () => {
           {
             loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm z-10">
-                <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
+                <ClipLoader size={45} speedMultiplier={1.25} color="purple" />
               </div>
             )
           }
@@ -305,7 +306,7 @@ const Dashboard = () => {
               </div>
 
               <button disabled={isLoading}className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
-               {isLoading && <LoaderCircleIcon className='animate-spin size-4 text-white'/>}
+               {isLoading && <ClipLoader size={20} speedMultiplier={1.25} color="white" />}
                 {isLoading ? 'Uploading...' : 'Create Resume'}
               </button>
               <XIcon

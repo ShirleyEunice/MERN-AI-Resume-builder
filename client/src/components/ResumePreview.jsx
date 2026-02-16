@@ -2,8 +2,8 @@ import ModernTemplate from "../components/templates/ModernTemplate";
 import MinimalTemplate from "../components/templates/MinimalTemplate";
 import MinimalImageTemplate from "../components/templates/MinimalImageTemplate";
 import ClassicTemplate from "../components/templates/ClassicTemplate";
-import ProfessionalSplit from "./templates/ProfessionalSplit";
-import ExecutiveEdge from "./templates/ExecutiveEdge";
+import ProfessionalSplit from "../components/templates/ProfessionalSplit";
+import ExecutiveEdge from "../components/templates/ExecutiveEdge";
 
 const ResumePreview = ({data, template, accentColor, classes = ""}) => {
     const renderTemplate = () => {

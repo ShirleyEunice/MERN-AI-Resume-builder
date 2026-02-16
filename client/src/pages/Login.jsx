@@ -1,5 +1,5 @@
 import React from 'react'
-import {Lock, Mail, User2Icon} from "lucide-react"
+import {Loader2, Lock, Mail, User2Icon} from "lucide-react"
 import api from '../configs/api';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const urlState = query.get('state')
   const [state, setState] = React.useState(urlState || "login")
+  const [loading, setLoading] = React.useState(false)
 
     const [formData, setFormData] = React.useState({
         name: '',
@@ -19,6 +20,7 @@ const Login = () => {
     })
 
     const handleSubmit = async (e) => {
+      setLoading(true);
   e.preventDefault();
   try {
     const { data } = await api.post(`/api/users/${state}`, formData);
@@ -27,11 +29,14 @@ const Login = () => {
       token: data.token,
       user: data.user,
     }));
+    setLoading(false);
     localStorage.setItem('token', data.token);
     toast.success(data.message);
 
   } catch (error) {
     toast.error(error?.response?.data?.message || error.message);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -95,9 +100,10 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="mt-2 w-full h-11 rounded-full text-white bg-purple-500 hover:opacity-90 transition-opacity"
-        >
-          {state === "login" ? "Login" : "Sign up"}
+          className="mt-2 w-full h-11 rounded-full text-white bg-purple-500 hover:opacity-90 transition-opacity flex items-center justify-center"
+        >{
+          loading ? <Loader2 className='w-6 h-6 animate-spin'/> : (state === "login" ? "Login" : "Sign up")
+        }
         </button>
         <p
           onClick={() =>

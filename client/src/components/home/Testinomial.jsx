@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Title from "./Title";
-import { BookUserIcon } from "lucide-react";
+import { BookUserIcon, Loader } from "lucide-react";
 import api from "../../configs/api";
 
 const Testimonial = () => {
   const [feedbacks, setFeedbacks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFeedback = async () => {
       const res = await api.get("/api/feedback");
       setFeedbacks(res.data.feedbacks);
+      setLoading(false);
     };
 
     fetchFeedback();
@@ -30,37 +32,43 @@ const Testimonial = () => {
 
     return (
       <div className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition w-72 shrink-0">
-        {/* Top Row */}
-        <div className="flex items-center gap-3">
-          <img
-            className="w-12 h-12 rounded-full object-cover"
-            src={`https://ui-avatars.com/api/?name=${displayName}&background=${bgColor}&color=fff`}
-            alt="User"
-          />
+        {loading ? (
+          <Loader className=" animate-spin" />
+        ) : (
+          <>
+            {/* Top Row */}
+            <div className="flex items-center gap-3">
+              <img
+                className="w-12 h-12 rounded-full object-cover"
+                src={`https://ui-avatars.com/api/?name=${displayName}&background=${bgColor}&color=fff`}
+                alt="User"
+              />
 
-          <div>
-            <p className="font-semibold text-gray-800">{displayName}</p>
-          </div>
-        </div>
+              <div>
+                <p className="font-semibold text-gray-800">{displayName}</p>
+              </div>
+            </div>
 
-        {/* Rating */}
-        <div className="flex items-center gap-1 mt-3">
-          {[...Array(card.rating)].map((_, i) => (
-            <span key={i} className="text-yellow-500 text-sm">
-              ★
-            </span>
-          ))}
-          {[...Array(5 - card.rating)].map((_, i) => (
-            <span key={i} className="text-gray-300 text-sm">
-              ★
-            </span>
-          ))}
-        </div>
+            {/* Rating */}
+            <div className="flex items-center gap-1 mt-3">
+              {[...Array(card.rating)].map((_, i) => (
+                <span key={i} className="text-yellow-500 text-sm">
+                  ★
+                </span>
+              ))}
+              {[...Array(5 - card.rating)].map((_, i) => (
+                <span key={i} className="text-gray-300 text-sm">
+                  ★
+                </span>
+              ))}
+            </div>
 
-        {/* Message */}
-        <p className="text-sm text-gray-700 mt-3 leading-relaxed">
-          {card.message}
-        </p>
+            {/* Message */}
+            <p className="text-sm text-gray-700 mt-3 leading-relaxed">
+              {card.message}
+            </p>
+          </>
+        )}
       </div>
     );
   };

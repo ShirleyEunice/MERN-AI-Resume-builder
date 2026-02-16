@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { data, Link, useParams } from 'react-router-dom'
 import { dummyResumeData } from '../assets/assets';
-import { ArrowLeft, Briefcase, ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, EyeOff, FileText, Folder, GraduationCap, Share, Share2Icon, Sparkle, Sparkles, User } from 'lucide-react';
+import { ArrowLeft, Briefcase, ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, EyeOff, FileText, Folder, GraduationCap, Loader, LoaderCircleIcon, Share, Share2Icon, Sparkle, Sparkles, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 import PersonalInfoForm from '../components/PersonalInfoForm';
 import ResumePreview from '../components/ResumePreview';
@@ -34,15 +34,19 @@ const ResumeBuilder = () => {
   })
 
   const loadExisitingResume = async () =>{
+    setLoading(true);
     try{
       const {data} = await api.get(`/api/resume/get/` + resumeId, {headers: {Authorization: token}});
       console.log(data, "Fetched resume data");
       if(data.resume){
         setResumeData(data.resume);
         document.title = data.resume.title;
+        setLoading(false);
       }
     }catch(error){
       console.log(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -198,7 +202,14 @@ const ResumeBuilder = () => {
               <div>
                 {/* Form Content */}
                 <div className="space-y-6">
-                  {activeSection.id === "personal" && (
+                  {
+                    loading ? (
+                      <div className="flex items-center justify-center h-60">
+                        <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
+                        </div>
+                    ) : (
+                      <>
+                      {activeSection.id === "personal" && (
                     <PersonalInfoForm
                       data={resumeData.personal_info}
                       onChange={(data) =>
@@ -246,6 +257,9 @@ const ResumeBuilder = () => {
                        data={resumeData.skills}
                        onChange={(data)=> setResumeData((prev)=> ({...prev, skills:data}))}/>
                   )}
+                      </>
+                    )
+                  }
                 </div>
                 <button 
                 onClick={()=> {toast.promise(saveResume, {loading: "Saving..."})}}
@@ -282,11 +296,19 @@ const ResumeBuilder = () => {
               </div>
             </div>
             {/* resume preview */}
-            <ResumePreview
+            {loading ? (
+              <div className="flex items-center justify-center h-96">
+                <LoaderCircleIcon className='animate-spin size-16' color='purple'/>
+              </div>
+            ) : (
+              <>
+              <ResumePreview
               data={resumeData}
               template={resumeData.template}
               accentColor={resumeData.accent_color}
             />
+              </>
+            )}
           </div>
         </div>
       </div>

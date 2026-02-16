@@ -2,6 +2,8 @@ import ModernTemplate from "../components/templates/ModernTemplate";
 import MinimalTemplate from "../components/templates/MinimalTemplate";
 import MinimalImageTemplate from "../components/templates/MinimalImageTemplate";
 import ClassicTemplate from "../components/templates/ClassicTemplate";
+import ProfessionalSplit from "../components/templates/ProfessionalSplit";
+import ExecutiveEdge from "../components/templates/ExecutiveEdge";
 
 const ResumePreview = ({data, template, accentColor, classes = ""}) => {
     const renderTemplate = () => {
@@ -13,6 +15,14 @@ const ResumePreview = ({data, template, accentColor, classes = ""}) => {
         case "minimal-image":
           return (
             <MinimalImageTemplate data={data} accentColor={accentColor} />
+          );
+        case "professional-split":
+          return (
+            <ProfessionalSplit data={data} accentColor={accentColor} />
+          );
+        case "executive-edge":
+          return (
+            <ExecutiveEdge data={data} accentColor={accentColor} />
           );
         default:
           return <ClassicTemplate data={data} accentColor={accentColor} />;
